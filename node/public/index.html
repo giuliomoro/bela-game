@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+    <title>Bela Game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="center-container no-wrap">
+    <div id="blocks"></div>
+    <script id="template" type="text/x-handlebars-template">
+        {{#each blocks}}
+        <div class="channel">
+            <div class="block">
+                <canvas class="meter" width="8" height="300"></canvas>
+                <div id="fader_{{id}}" class="fader draggable-fader"  style="top: 50px"></div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+</div>
+</body>
+<!-- JavaScript Libraries from CDN -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts/vendor/TweenLite.min.js"></script>
+  <script src="scripts/vendor/Draggable.min.js"></script>
+  <script src="scripts/vendor/CSSPlugin.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="scripts/vendor/jquery-3.2.1.slim.min.js"></script>
+  <script src="scripts/vendor/popper.min.js"></script>
+  <script src="scripts/vendor/bootstrap.min.js"></script>
+  <script src="scripts/vendor/bootstrap-slider.min.js"></script>
+  <script defer src="scripts/vendor/font-awesome-all.js"></script>
+  <script src="scripts/vendor/handlebars.min.js"></script>
+<script src="scripts/game.js"></script>
+
+</html>

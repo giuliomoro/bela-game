@@ -1,0 +1,234 @@
+.mixer-heading {
+    position: absolute;
+    top: 22px;
+    right: 17px;
+}
+
+
+.center-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+h2 {
+    color: whitesmoke;
+}
+
+body {
+    background-color:lightgrey;
+}
+
+.dialog-col {
+    padding-right:0px;
+    font-size: 0.9em;
+}
+
+.dialog-row {
+    height: 36px;
+}
+
+.eq-btn, .comp-btn {
+ margin-top: 15px;
+ width:100%;
+}
+.slider.slider-horizontal {
+    width: 100%;
+}
+
+.eq-input, .compressor-input {
+    width: 60px;
+    text-align: right;
+    font-family: Arial;
+    font-size: 10pt;
+}
+
+#mixer {
+    position: relative;
+    background: #292c30;
+    border-radius: 4px;
+    box-shadow: inset 0px 2px 6px rgba(0, 0, 0, 0.5), 0px 2px 5px rgba(220, 255, 255, 0.15);
+    display: inline-block;
+    margin: 0 auto 12px;
+    min-height: 412px;
+    /*min-width: 1200px;*/
+    padding: 16px;
+}
+
+.panner-knob {
+    height:60px;
+}
+
+.channel {
+    background: #23262a;
+    border-radius: 3px;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.35);
+    display: inline-block;
+    margin: 0 2px;
+    overflow: hidden;
+    padding: 8px;
+    position: relative;
+    width: 75px;
+}
+
+
+.channel-label {
+    color:white;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: small;
+}
+
+/* buttons */
+.channel-btn {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: slategray;
+    box-shadow: 0 0 2px rgba(0,0,0,0.6);
+    color: #131519;
+    cursor: pointer;
+    font-size: 12px;
+    height: 25px;
+    line-height: 20px;
+    text-shadow: 0 1px 1px rgba(200,200,240,.15);
+}
+
+.mute, .solo {
+    float: left;
+    width: 50%;
+    margin: 6px 0 0;
+}
+
+.mute {
+    border-radius: 2px 0 0 2px;
+}
+
+.solo {
+    border-radius: 0 2px 2px 0;
+}
+
+.mute.active, .solo.active {
+    box-shadow: 0 0 2px rgba(0,0,0,0.6), inset 0 0 5px rgba(0,0,0,0.3);
+    color: #0cf;
+}
+
+.pan {
+    margin: 40px 0 0;
+    position: relative;
+}
+
+.panner {
+    background: -webkit-radial-gradient(center, ellipse cover, hsl(214, 8%, 87%) 0%,hsl(214, 8%, 60%) 100%);
+    background:    -moz-radial-gradient(center, ellipse cover, hsl(214, 8%, 87%) 0%,hsl(214, 8%, 60%) 100%);
+    background:         radial-gradient(center, ellipse cover, hsl(214, 8%, 87%) 0%,hsl(214, 8%, 60%) 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(0,0,0,0.85);
+    cursor: pointer;
+    height: 40px;
+    left: 50%;
+    margin-left: 10px;
+    top: 0px;
+    width: 40px;
+}
+
+.pan-indicator {
+    background: #15181b;
+    border-radius: 50%;
+    box-shadow: inset 0px 0px 2px rgba(0,0,0,0.3);
+    height: 6px;
+    left: 50%;
+    margin-left: -3px;
+    position: absolute;
+    top: 3px;
+    width: 6px;
+}
+
+.block {
+    background: #15181b;
+    border-radius: 2px;
+    height: 300px;
+    margin: 10px auto 0;
+    position: relative;
+    width: 8px;
+}
+
+
+.fader {
+    background-image:    -moz-linear-gradient(top, hsl(214, 8%, 59%) 0%, hsl(214, 8%, 95%) 15%, hsl(214, 8%, 71%) 35%, hsl(214, 8%, 63%) 50%, hsl(214, 8%, 71%) 65%, hsl(214, 8%, 95%) 85%, hsl(214, 8%, 59%) 100%);
+    background-image: -webkit-linear-gradient(top, hsl(214, 8%, 59%) 0%, hsl(214, 8%, 95%) 15%, hsl(214, 8%, 71%) 35%, hsl(214, 8%, 63%) 50%, hsl(214, 8%, 71%) 65%, hsl(214, 8%, 95%) 85%, hsl(214, 8%, 59%) 100%);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.85);
+    cursor: pointer;
+    height: 60px;
+    left: -13px;
+    position: absolute;
+    top: 200px;
+    width: 35px;
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+/* bottom buttons */
+.buttons {
+    display: inline-block;
+    position: relative;
+    margin: 10px;
+    /*width: 217px;*/
+}
+
+.btn-cntrl {
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 2px;
+    box-shadow: inset 0 -2px hsla(0, 0%, 0%, 0.1), 0 0 8px 2px hsla(0, 0%, 0%, 0.75);
+    display: inline-block;
+    margin-left: 6px;
+}
+
+.alert {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.message-hidden {
+    display: none;
+}
+
+#console-ouput {
+    height: 102px;
+    position: absolute;
+    top: 605px;
+    left: 315px;
+    width: calc(100% - 335px);
+    background-color:white;
+    overflow: auto;
+    margin: 10px;
+    border-radius: 2px;
+}
+
+code.command {
+    color: black;
+    font-weight: bold;
+    background-color:white;
+    white-space: pre;
+    font-family: monospace;
+    display: inline-block;
+    margin: 6px 6px 6px 6px;
+    padding: 6px 12px;
+
+}
+
+.no-wrap {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/*div.row.customClass [class*="col-md"] {*/
+    /*display: inline-block;*/
+    /*float: none; !* Very important *!*/
+/*}*/
+
+
+
+

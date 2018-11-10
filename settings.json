@@ -1,0 +1,1 @@
+{"fileName":"_main.pd","CLArgs":{"-p":"128","-C":"8","-B":"16","-H":"0","-N":0,"-G":0,"-M":"0","-D":"0","-A":"0","--pga-gain-left":"10","--pga-gain-right":"10","user":"","make":"LDLIBS=-laubio -lpd;AT=","-X":"0","audioExpander":"0","-Y":"","-Z":"","--disable-led":"0"}}
