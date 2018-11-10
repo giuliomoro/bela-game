@@ -28,7 +28,7 @@ fvec_t *pitch;
 smpl_t amp;
 
 int mix_input = 0;
-int buffer_size = 1024;
+int buffer_size = 2048;
 char_t * pitch_unit = "default";
 char_t * pitch_method = "default";
 uint_t hop_size = 128;
@@ -63,7 +63,7 @@ void aubio_pitch_render(BelaContext *context, void *userData)
 	smpl_t audioIn[context->audioFrames];
 	for(unsigned int n = 0; n < context->audioFrames; ++n)
 	{
-		audioIn[n] = audioRead(context, n, directChannel) - cancellationGain * audioRead(context, n, otherChannel);
+		audioIn[n] = audioReadNI(context, n, directChannel) - cancellationGain * audioReadNI(context, n, otherChannel);
 	}
 	fvec_t ibuf = {
 		.length = context->audioFrames,
