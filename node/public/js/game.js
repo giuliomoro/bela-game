@@ -9,6 +9,7 @@ socket.on('player1-xy', function(obj) {
     console.log(obj.data1, obj.data2);
 });
 
+
 let columns;
 let rows;
 
@@ -59,7 +60,7 @@ function setup() {
   blocks = new Array();
   blocks.push(new Block(1, 5, Math.round(3 * columns / 4)));
   console.log(blocks);
-  blocks[0].draw();
+  blocks[0]._draw();
 
   blocks.push(new Block());
   blocks[1].start(30);
@@ -137,8 +138,15 @@ Block.prototype.start = function(height) {
 Block.prototype.stop = function() {
   this.creation = false;
 }
+Block.prototype.draw = function() {
 
-Block.prototype.draw = function(oldX) {
+  for (let x = this.position; x < this.position + this.width; x++) {
+    for (let y = rows - 1; y > rows - 1 - this.height; y--) {
+      board[x][y] = 1;
+    }
+  }
+}
+Block.prototype._draw = function(oldX) {
   let xStart = max(this.position, 0);
   let xEnd = max(this.position + this.width, 0);
 
@@ -147,7 +155,8 @@ Block.prototype.draw = function(oldX) {
       board[x][y] = 1;
     }
   }
-  if (!this.creation) {
+
+  if (this.creation !== true && oldX != null) {
     xStart = xEnd;
     xEnd = oldX[1];
     for (let x = xStart; x < xEnd; x++) {
@@ -174,7 +183,8 @@ Block.prototype.move = function(speed, incr) {
 
   this.position = this.position - increment;
   if (oldX[1] > 0) {
-    this.draw(oldX);
+    // this.draw(oldPosition);
+    this._draw(oldX);
   } else {
     blocks.shift();
   }
@@ -186,11 +196,4 @@ Block.prototype.move = function(speed, incr) {
 // http: + //codetheory.in/time-based-animations-in-html5-games-why-and-how-to-implement-them/
 var calcSpeed = function(del, speed, FPS) {
   return (speed * del) * (FPS / 1000);
-}
-
-// convert a value from one scale to another
-// e.g. scale(-96, -192, 0, 0, 100) to convert
-// -96 from dB (-192 - 0) to percentage (0 - 100)
-function scale( val, f0, f1, t0, t1 ) {
-    return (val - f0) * (t1 - t0) / (f1 - f0) + t0;
 }
