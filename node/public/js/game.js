@@ -1,3 +1,14 @@
+var socket = io();
+
+socket.on('connect', function() {
+ console.log('connected');
+});
+
+socket.on('player1-xy', function(obj) {
+    console.log(JSON.stringify(obj));
+    console.log(obj.data1, obj.data2);
+});
+
 let columns;
 let rows;
 
@@ -175,4 +186,11 @@ Block.prototype.move = function(speed, incr) {
 // http: + //codetheory.in/time-based-animations-in-html5-games-why-and-how-to-implement-them/
 var calcSpeed = function(del, speed, FPS) {
   return (speed * del) * (FPS / 1000);
+}
+
+// convert a value from one scale to another
+// e.g. scale(-96, -192, 0, 0, 100) to convert
+// -96 from dB (-192 - 0) to percentage (0 - 100)
+function scale( val, f0, f1, t0, t1 ) {
+    return (val - f0) * (t1 - t0) / (f1 - f0) + t0;
 }
