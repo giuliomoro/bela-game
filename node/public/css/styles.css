@@ -1,0 +1,127 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-family: 'Courier New', Courier, monospace;
+}
+h1 {
+  font-size: 4.5em;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-size: 2.5em;
+  font-weight: bold;
+  letter-spacing: 0px;
+}
+
+h3 {
+  font-size: 2em;
+  font-weight: bold;
+  letter-spacing: 0px;
+}
+
+h4 {
+  font-size: 1.5em;
+  font-weight: bold;
+  letter-spacing: 0px;
+}
+
+h5 {
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: 0px;
+}
+
+h6 {
+  font-size: 0.5em;
+  font-weight: bold;
+  letter-spacing: 0px;
+}
+
+p {
+  text-align:center;
+  font-size: 0.8em;
+}
+
+.right-aligned {
+  position: absolute;
+  right: 0px;
+  /*align:right;*/
+}
+
+.left-aligned {
+  position: absolute;
+  left: 0px;
+  /*align:left;*/
+}
+
+.center {
+  display:block;
+  margin:auto;
+  text-align:center;
+  vertical-align: middle;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column {
+    float: left;
+}
+
+/* Left and right column */
+.column.side {
+    width: 25%;
+}
+
+/* Middle column */
+.column.middle {
+    width: 50%;
+}
+
+header {
+  background-color: rgb(0, 0, 0);
+}
+
+.page-title {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 15px 15px 15px 15px;
+    margin: 25px 25px 25px 50px;
+    display: inline-block;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 15px;
+}
+
+footer {
+  background-color: rgb(0, 0, 0);
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.contact-info {
+  color: rgb(255, 255, 255);
+  text-align: center;
+  padding: 15px;
+  margin: 15px;
+}
