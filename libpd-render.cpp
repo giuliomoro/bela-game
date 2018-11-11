@@ -34,9 +34,13 @@ static unsigned int gFirstScopeChannel;
 //MODIFICATION-START
 #include <aubio/aubio.h>
 
+extern float gSpeedX;
+extern float gX;
+extern float gY;
+extern float gNote;
+extern float gAmp;
+
 void initOSC();
-fvec_t *pitch;
-smpl_t amp;
 extern "C" {
 	int aubio_pitch_setup(float sampleRate);
 	void process_block(fvec_t * ibuf, fvec_t * obuf);
@@ -486,24 +490,25 @@ bool setup(BelaContext *context, void *userData)
 	return true;
 }
 void sendDataToBrowser(float pitch, float amp); // MODIFICATION
+void computeLocationSendToBrowser(float db, float note); // MODIFICATION
+float gNumSteps = 8; // MODIFICATION
 
 void render(BelaContext *context, void *userData)
 {
+	static float speed = 0; // MODIFICATION
 	{ //MODIFICATION
 		aubio_pitch_render(context, userData);
+		computeLocationSendToBrowser(gAmp, gNote);
+		libpd_float("bela_steps", (int)(0.5f + gX * gNumSteps));
 
 		static auto lastUpdate = context->audioFramesElapsed;
 		if(context->audioFramesElapsed - lastUpdate > 5000)
 		{
 			lastUpdate = context->audioFramesElapsed;
-			float newAmp = amp * 200 + 0.2;
-			libpd_float("bela_loud", newAmp);
-			float pitchMsg = fvec_get_sample(pitch, 0);
-			sendDataToBrowser(pitchMsg, newAmp); // MODIFICATION
-			rt_printf("pitch: %7.3f, amp: %6f\n", pitchMsg, newAmp);
+			//rt_printf("note: %8.3f, amp: %10f, speed: %10f\n", gNote, newAmp, speed);
+
 		}
 	}
-return;
 
 	int num;
 #ifdef PARSE_MIDI
