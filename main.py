@@ -2,6 +2,7 @@ from query import *
 #from queryfreesound import *
 import sys
 import sox
+import os
 
 keywords = sys.argv[1:]
 names = ['ambient', 'drum1', 'drum2', 'drum3', 'drum4', 'drum5', 'drum6', 'drum7', 'drum8']
@@ -14,3 +15,6 @@ for i,k in enumerate(keywords):
     tfm.gain(gain_db=0.0, normalize=True, limiter=True, balance=None)
 # create the output file.
     tfm.build('samples/'+names[i]+'.mp3', 'samples/'+names[i]+'.wav')
+
+    os.remove('samples/'+names[i]+'.mp3')
+
