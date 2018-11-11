@@ -1,15 +1,3 @@
-var socket = io();
-
-socket.on('connect', function() {
- console.log('connected');
-});
-
-socket.on('player1-xy', function(obj) {
-    console.log(JSON.stringify(obj));
-    console.log(obj.data1, obj.data2);
-});
-
-
 let columns;
 let rows;
 
@@ -21,9 +9,29 @@ let board;
 let fRate = 30; //starting FPS
 let speed = 2;
 
-let imageCoordinates = new Array(2);
-let imageXpoints = new Array(2);
-let imageDimmensions = new Array(2);
+let imgCoordinates = new Array(2);
+let imgXpoints = new Array(2);
+let imgDimensions = new Array(2);
+let imageY = 0;
+
+
+var avatar;
+var obstacles;
+
+var obstacleWidth = w * 15;
+var obstacleSpace = w * 20;
+var nextObstacle = 0;
+
+let nBlocks = 8;
+
+let collision = false;
+
+var socket = io();
+
+socket.on('connect', function() {
+ console.log('connected');
+});
+
 
 let colors = {
   background: 255,
@@ -31,10 +39,15 @@ let colors = {
 }
 
 var blocks = new Array();
+var blockHeights = [15, 17, 18, 20, 18, 15, 30, 12];
 
 function preload() {
   backgroundImage = loadImage("images/background.png");
-  avatar = loadImage("images/mouth.png");
+  avatarImg = loadImage("images/avatar-sword1.png");
+}
+
+function calcImgY(newYpoint) {
+  imgCoordinates[1] = height - (newYpoint+1) * w - imgDimensions[1];
 }
 
 function setup() {
@@ -46,154 +59,101 @@ function setup() {
 
   columns = floor(width / w);
   rows = floor(height / w);
-  board = new Array(columns);
-  for (let i = 0; i < columns; i++)
-    board[i] = new Array(rows);
 
-  imageDimmensions[0] = imageDimmensions[1] = avatarRatio * w;
-  imageXpoints[0] = Math.round(columns / 5);
-  imageXpoints[1] = Math.round(columns / 5) + avatarRatio;
-  console.log(imageXpoints[0], imageXpoints[1]);
-  imageCoordinates[0] = 0 +  imageXpoints[0]* w;
-  imageCoordinates[1] = height - (5 + 1) * w - imageDimmensions[1];
-  // image(avatar, 0, 0, imageDimmensions[0], imageDimmensions[1]);
+  imgDimensions[0] = imgDimensions[1] = avatarRatio * w;
+  imgXpoints[0] = Math.round(columns / 5);
+  imgXpoints[1] = Math.round(columns / 5) + avatarRatio;
+  imgCoordinates[0] = 0 +  imgXpoints[0]* w;
+  imgCoordinates[1] = height - imgDimensions[1]/2;
+
+  avatarImg.resize(imgDimensions[0], imgDimensions[1]);
+  avatar = createSprite(imgCoordinates[0], imgCoordinates[1], imgDimensions[0], imgDimensions[1]);
+  avatar.setCollider("rectangle", 0, 0, imgDimensions[0], imgDimensions[1]);
+
+  avatar.addImage(avatarImg);
+
+  obstacles = new Group();
+
   blocks = new Array();
-  blocks.push(new Block(1, 5, Math.round(3 * columns / 4)));
-  console.log(blocks);
-  blocks[0]._draw();
-
-  blocks.push(new Block());
-  blocks[1].start(30);
-
-}
-
-function overlap() {
-  // Check if the avatar is on top of a block
-  // Avatar never moves on the x-axis
-  let blockX = new Array(2);
-  blockX[0] = blocks.map(a => a.position);
-  blockX[1] = blocks.map(a => a.position + a.width);
-  let onBlock = false;
-  for( let b=0; b<blocks.length; b++) {
-    // if(imageXpoints[0] >= blockX[0][b] && imageXpoints[1] <= blockX[1][b]) {
-    if(imageXpoints[0] >= blockX[0][b] && imageXpoints[0] <= blockX[1][b]) {
-      onBlock = true;
-      break;
-    }
+  for(let b = 0; b < nBlocks; b++) {
+    blocks.push(new Block(b, blockHeights[b]))
   }
-  if( onBlock === false)
-    setup();
+
 }
+
+socket.on('player1-xy', function(obj) {
+    // imageY = Math.round(linScale(obj.data1, 150, 400, 0, rows-1));
+    console.log(obj.data2);
+    if(obj.data2 >= 0) {
+      if(avatar !== undefined)
+        avatar.position.y = linScale(obj.data2, 1, 0, 0, height-imgDimensions[0])
+    }
+
+});
 
 function draw() {
   background(backgroundImage);
-  printGrid(board);
-  // image(avatar, 0, 0, avatarRatio*w, avatarRatio*w);
-  image(avatar, imageCoordinates[0], imageCoordinates[1], imageDimmensions[0], imageDimmensions[1]);
 
-  for (let b = 0; b < blocks.length; b++) {
-    // blocks[b].move(14);
-  }
-  overlap();
-}
-
-function keyPressed() {
-  if (keyCode === RIGHT_ARROW) {
+  if(!avatar.overlap(obstacles)) {
     for (let b = 0; b < blocks.length; b++) {
-      blocks[b].move(null, 1);
-    }
-  } else if (keyCode === UP_ARROW) {
-    imageCoordinates[1] -= w;
-  } else if (keyCode === DOWN_ARROW) {
-    // imageCoordinates[1] += w;
-    // setup();
-  }
-}
-
-function printGrid(board) {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[0].length; j++) {
-      if ((board[i][j] == 1)) {
-        fill(colors.grid);
-      } else {
-        noFill();
-      }
-      noStroke();
-      rect(i * w, j * w, w - 1, w - 1);
+      blocks[b].move(20);
     }
   }
+
+  // }
+
+   drawSprite(avatar);
+   drawSprites(obstacles);
+
 }
 
-function Block(position, height, width) {
+function Block(id, height) {
+  this.id = id;
   this.height = height;
-  this.width = width || 1;
-  this.position = position || columns - 1;
-  this.creation;
+  this.position = this.calcPosition(this.id);
+  this.obstacle;
+  this.create();
+
   this.tick = new Date().getTime();
 }
-Block.prototype.start = function(height) {
-  this.height = height || this.height;
-  this.creation = true;
+Block.prototype.calcPosition = function(i) {
+  return width + (i+1) * obstacleWidth/2 + i * obstacleSpace;
 }
-Block.prototype.stop = function() {
-  this.creation = false;
+Block.prototype.create = function() {
+    this.obstacle = createSprite(this.position, height - (this.height/2), obstacleWidth, this.height * w)
+    this.obstacle.setCollider("rectangle", 0, 0, obstacleWidth, this.height * w);
+    this.obstacle.shapeColor = color(colors.grid);
+    obstacles.add(this.obstacle);
 }
-Block.prototype.draw = function() {
-
-  for (let x = this.position; x < this.position + this.width; x++) {
-    for (let y = rows - 1; y > rows - 1 - this.height; y--) {
-      board[x][y] = 1;
-    }
-  }
+Block.prototype.updateHeight = function(newHeight) {
+  this.height = newHeight;
 }
-Block.prototype._draw = function(oldX) {
-  let xStart = max(this.position, 0);
-  let xEnd = max(this.position + this.width, 0);
-
-  for (let x = xStart; x < xEnd; x++) {
-    for (let y = rows - 1; y > rows - 1 - this.height; y--) {
-      board[x][y] = 1;
-    }
+Block.prototype.move = function(incr) {
+  // this.obstacle.velocity.x = (-incr)/10;
+  this.obstacle.position.x = this.obstacle.position.x - incr;
+  if(this.obstacle.position.x == width - obstacleWidth/2) {
+    // console.log("Hello, I'm block "+this.id);
+  } else if(this.obstacle.position.x <= -obstacleWidth/2) {
+    // console.log("Bye! Says block "+this.id);
+    this.obstacle.position.x = this.obstacle.position.x + (nBlocks-2) * obstacleWidth + (nBlocks-1.5) * obstacleSpace;
   }
-
-  if (this.creation !== true && oldX != null) {
-    xStart = xEnd;
-    xEnd = oldX[1];
-    for (let x = xStart; x < xEnd; x++) {
-      for (let y = rows - 1; y > rows - 1 - this.height; y--) {
-        board[x][y] = 0;
-      }
-    }
-  }
-}
-
-Block.prototype.move = function(speed, incr) {
-  this.tock = new Date().getTime();
-
-  let oldX = [this.position, this.position + this.width];
-
-  let delta = this.tock - this.tick;
-  let increment = incr || Math.round(calcSpeed(delta, 1, speed));
-  if (this.creation == true) {
-    this.width += increment;
-    // COMMENT THIS!!
-    if (this.width > 2)
-      this.stop();
-  }
-
-  this.position = this.position - increment;
-  if (oldX[1] > 0) {
-    // this.draw(oldPosition);
-    this._draw(oldX);
-  } else {
-    blocks.shift();
-  }
-
-  this.tick = this.tock;
 }
 
 // adapted from:
 // http: + //codetheory.in/time-based-animations-in-html5-games-why-and-how-to-implement-them/
 var calcSpeed = function(del, speed, FPS) {
   return (speed * del) * (FPS / 1000);
+}
+
+// convert a value from one scale to another
+// e.g. scale(-96, -192, 0, 0, 100) to convert
+// -96 from dB (-192 - 0) to percentage (0 - 100)
+function linScale( val, f0, f1, t0, t1 ) {
+    let retVal =  (val - f0) * (t1 - t0) / (f1 - f0) + t0;
+    if(retVal < t0)
+      retVal = t0;
+    if(retVal > t1)
+      retVal = t1;
+
+    return retVal;
 }

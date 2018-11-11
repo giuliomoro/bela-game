@@ -15,8 +15,8 @@ void setupLocation(float newLocationSampleRate)
 
 float mapNote(float note)
 {
-	float minNote = 36;
-	float maxNote = 72;
+	float minNote = 48;
+	float maxNote = 78;
 	float range = maxNote - minNote;
 	float rel = (note - minNote)/range;
 	// TODO: should clip?
@@ -31,6 +31,14 @@ float smoothX(float newX)
 	oldX = x;
 	return x;
 }
+float smoothY(float newY)
+{
+	float positionAlpha = 0.98;
+	static float oldY = 0;
+	float y = newY * (1.f - positionAlpha) + oldY * positionAlpha;
+	oldY = y;
+	return y;
+}
 
 // If you think it's a funky name, remember this was a hackathon
 void computeLocationSendToBrowser(float db, float note)
@@ -44,7 +52,7 @@ void computeLocationSendToBrowser(float db, float note)
 	}
 
 	float x = smoothX(pastX + speedX);
-	float y = mapNote(note);
+	float y = smoothY(mapNote(note));
 	pastX = x;
 	while(x >= 1){
 		x -= 1.f;
@@ -52,11 +60,11 @@ void computeLocationSendToBrowser(float db, float note)
 	gSpeedX = speedX;
 	gX = x;
 	gY = y;
-	sendDataToBrowser(gX, gY);
 
 	static int count = 0;
 	if((count & 15) == 0)
 	{
+		sendDataToBrowser(gX, gY);
 		rt_printf("x: %10f, y: %10f, speed: %10f, db: %10f\n", x, y, gSpeedX, db);
 	}
 	count++;

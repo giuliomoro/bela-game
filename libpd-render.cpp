@@ -99,7 +99,6 @@ Midi* openMidiDevice(std::string name, bool verboseSuccess = false, bool verbose
 	newMidi->writeTo(name.c_str());
 #ifdef PARSE_MIDI
 	newMidi->enableParser(true);
-	newMidi->setParserCallback(midiMessageCallback, NULL);//MODIFICATION
 #else
 	newMidi->enableParser(false);
 #endif /* PARSE_MIDI */
@@ -140,13 +139,15 @@ static unsigned int getPortChannel(int* channel){
 
 void Bela_MidiOutNoteOn(int channel, int pitch, int velocity) {
 	int port = getPortChannel(&channel);
-	rt_printf("noteout _ port: %d, channel: %d, pitch: %d, velocity %d\n", port, channel, pitch, velocity);
-	midi[port]->writeNoteOn(channel, pitch, velocity);
+	if(port < midi.size()){
+		//rt_printf("noteout _ port: %d, channel: %d, pitch: %d, velocity %d\n", port, channel, pitch, velocity); // MODIFICATION
+		midi[port]->writeNoteOn(channel, pitch, velocity);
+	}
 }
 
 void Bela_MidiOutControlChange(int channel, int controller, int value) {
 	int port = getPortChannel(&channel);
-	rt_printf("ctlout _ port: %d, channel: %d, controller: %d, value: %d\n", port, channel, controller, value);
+	//rt_printf("ctlout _ port: %d, channel: %d, controller: %d, value: %d\n", port, channel, controller, value); // MODIFICATION
 	midi[port]->writeControlChange(channel, controller, value);
 }
 
@@ -491,7 +492,7 @@ bool setup(BelaContext *context, void *userData)
 }
 void sendDataToBrowser(float pitch, float amp); // MODIFICATION
 void computeLocationSendToBrowser(float db, float note); // MODIFICATION
-float gNumSteps = 8; // MODIFICATION
+int gNumSteps = 8; // MODIFICATION
 
 void render(BelaContext *context, void *userData)
 {
@@ -499,7 +500,8 @@ void render(BelaContext *context, void *userData)
 	{ //MODIFICATION
 		aubio_pitch_render(context, userData);
 		computeLocationSendToBrowser(gAmp, gNote);
-		libpd_float("bela_steps", (int)(0.5f + gX * gNumSteps));
+		int step = (int)(0.5f + gX * gNumSteps) % gNumSteps;
+		libpd_float("bela_steps", step);
 
 		static auto lastUpdate = context->audioFramesElapsed;
 		if(context->audioFramesElapsed - lastUpdate > 5000)
@@ -512,7 +514,7 @@ void render(BelaContext *context, void *userData)
 
 	int num;
 #ifdef PARSE_MIDI
-	if(0)//MODIFICATION
+	if(1)
 	for(unsigned int port = 0; port < midi.size(); ++port){
 		while((num = midi[port]->getParser()->numAvailableMessages()) > 0){
 			static MidiChannelMessage message;
