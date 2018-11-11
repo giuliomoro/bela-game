@@ -35,8 +35,6 @@ python main.py background-sound keyword1 keyword2 keyword3 keyword4 keyword5 key
 
 ## How to jam?
 
-<img src="https://drive.google.com/file/d/1dYIFgkGaNjBkSI0dMnNHLUEHXjGNdBkH/view?usp=sharing width="1000">
-
 - Get voice from the microphone input of player `Duo-1` such that pitch and loudness are estimated using Bela.
 
 - Audio samples are retrieved based on the keywords selected by player `Duo-2`, who can control the samples later by a midi sequencer (or other gestural interfaces) to jam with `Duo-1`.
