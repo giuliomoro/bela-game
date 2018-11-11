@@ -139,8 +139,10 @@ static unsigned int getPortChannel(int* channel){
 
 void Bela_MidiOutNoteOn(int channel, int pitch, int velocity) {
 	int port = getPortChannel(&channel);
-	//rt_printf("noteout _ port: %d, channel: %d, pitch: %d, velocity %d\n", port, channel, pitch, velocity); // MODIFICATION
-	midi[port]->writeNoteOn(channel, pitch, velocity);
+	if(port < midi.size()){
+		//rt_printf("noteout _ port: %d, channel: %d, pitch: %d, velocity %d\n", port, channel, pitch, velocity); // MODIFICATION
+		midi[port]->writeNoteOn(channel, pitch, velocity);
+	}
 }
 
 void Bela_MidiOutControlChange(int channel, int controller, int value) {
