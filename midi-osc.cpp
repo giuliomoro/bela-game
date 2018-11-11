@@ -97,20 +97,30 @@ void handleControlChange(char controller, char value)
 			break;
 		case 19:
 			sendBlockSizeToBrowser(0, value);
+			break;
 		case 23:
 			sendBlockSizeToBrowser(1, value);
+			break;
 		case 27:
 			sendBlockSizeToBrowser(2, value);
+			break;
 		case 31:
 			sendBlockSizeToBrowser(3, value);
+			break;
 		case 49:
 			sendBlockSizeToBrowser(4, value);
+			break;
 		case 53:
 			sendBlockSizeToBrowser(5, value);
+			break;
 		case 57:
 			sendBlockSizeToBrowser(6, value);
+			break;
 		case 61:
 			sendBlockSizeToBrowser(7, value);
+			break;
+		default:
+			break;
 	}
 }
 
