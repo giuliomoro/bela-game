@@ -34,7 +34,7 @@ let web_ui_socket;
 socket.bind(localPort, localIp);
 
 socket.on('message', (message, info) => {
-    console.log('message');
+    // console.log('message');
     const msg = osc.fromBuffer(message);
     if (msg.oscType === 'message'){
         parseMessage(msg);
@@ -66,7 +66,7 @@ function parseMessage(msg){
             console.log("Unexpected type for argument 0: " + msg.args[0].type);
             return;
         }
-        console.log(JSON.stringify(msg));
+        // console.log(JSON.stringify(msg));
         if (web_ui_socket) {
             let data = msg.args[0].value.split(',');
 		    web_ui_socket.emit('player2-note', {note: data[0], velocity: data[1], on: data[2]});
@@ -76,7 +76,7 @@ function parseMessage(msg){
             console.log("Unexpected type for argument 0: " + msg.args[0].type);
             return;
         }
-        console.log(JSON.stringify(msg));
+        // console.log(JSON.stringify(msg));
         if (web_ui_socket) {
             let data = msg.args[0].value.split(',');
             web_ui_socket.emit('player2-control', {data1: data[0], data2: data[1]});
@@ -86,7 +86,7 @@ function parseMessage(msg){
             console.log("Unexpected type for argument 0: " + msg.args[0].type);
             return;
         }
-        console.log(JSON.stringify(msg));
+        // console.log(JSON.stringify(msg));
         if (web_ui_socket) {
             let data = msg.args[0].value.split(',');
             web_ui_socket.emit('player1-xy', {data1: data[0], data2: data[1]});
@@ -117,7 +117,7 @@ function sendHandshakeReply(){
 
 io.on('connection', function(http_socket){
     web_ui_socket = http_socket;
-    console.log('a user connected');
+    // console.log('a user connected');
 
     http_socket.on("info", function (obj) {
         // console.log(JSON.stringify(obj));
@@ -126,7 +126,7 @@ io.on('connection', function(http_socket){
 
 
     http_socket.on('disconnect', function(){
-        console.log('user disconnected');
+        // console.log('user disconnected');
     });
 });
 
