@@ -5,7 +5,7 @@ float gSpeedX;
 float gX = 0;
 float gY = 0;
 
-void sendDataToBrowser(float x, float y); // midi-osc.cpp
+void sendPositionalDataToBrowser(float x, float y, float amplitude); // midi-osc.cpp
 static float locationSampleRate;
 
 void setupLocation(float newLocationSampleRate)
@@ -62,9 +62,9 @@ void computeLocationSendToBrowser(float db, float note)
 	gY = y;
 
 	static int count = 0;
-	if((count & 15) == 0)
+	if((count & 31) == 0)
 	{
-		sendDataToBrowser(gX, gY);
+		sendPositionalDataToBrowser(gX, gY, gSpeedX * 20);
 		rt_printf("x: %10f, y: %10f, speed: %10f, db: %10f\n", x, y, gSpeedX, db);
 	}
 	count++;

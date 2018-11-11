@@ -132,7 +132,7 @@ static unsigned int getPortChannel(int* channel){
 	if(port >= midi.size()){
 		// if the port number exceeds the number of ports available, send out
 		// of the first port 
-		rt_fprintf(stderr, "Port out of range, using port 0 instead\n");
+		//rt_fprintf(stderr, "Port out of range, using port 0 instead\n"); // MODIFICATION
 		port = 0;
 	}
 	return port;
@@ -177,6 +177,7 @@ void Bela_MidiOutPolyAftertouch(int channel, int pitch, int pressure){
 }
 
 void Bela_MidiOutByte(int port, int byte){
+	return; // MODIFICATION
 	rt_printf("port: %d, byte: %d\n", port, byte);
 	if(port > (int)midi.size()){
 		// if the port is out of range, redirect to the first port.
@@ -491,7 +492,6 @@ bool setup(BelaContext *context, void *userData)
 	dcm.setVerbose(false);
 	return true;
 }
-void sendDataToBrowser(float pitch, float amp); // MODIFICATION
 void computeLocationSendToBrowser(float db, float note); // MODIFICATION
 int gNumSteps = 8; // MODIFICATION
 

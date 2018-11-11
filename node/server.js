@@ -81,7 +81,7 @@ function parseMessage(msg){
             let data = msg.args[0].value.split(',');
             web_ui_socket.emit('block-type', {index: data[0], type: data[1]});
         }
-    }  else if (address[1] === 'osc-player1-xy'){
+    }  else if (address[1] === 'osc-player1-xya'){
         if(msg.args[0].type != 'string'){
             console.log("Unexpected type for argument 0: " + msg.args[0].type);
             return;
@@ -89,7 +89,7 @@ function parseMessage(msg){
         // console.log(JSON.stringify(msg));
         if (web_ui_socket) {
             let data = msg.args[0].value.split(',');
-            web_ui_socket.emit('player1-xy', {data1: data[0], data2: data[1]});
+            web_ui_socket.emit('player1-xya', {x: data[0], y: data[1], a: data[2]});
         }
     }
 }

@@ -62,9 +62,9 @@ void initOSC() {
 #endif
 }
 
-void sendDataToBrowser(float x, float y)
+void sendPositionalDataToBrowser(float x, float y, float a)
 {
-	oscClient.queueMessage(oscClient.newMessage.to("/osc-player1-xy").add(encodeControlChange(x, y)).end());
+	oscClient.queueMessage(oscClient.newMessage.to("/osc-player1-xya").add(encodeNoteOnOff(x, y, a)).end());
 }
 
 void sendBlockSizeToBrowser(char index, char value)
