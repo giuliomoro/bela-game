@@ -2,6 +2,7 @@
 #include <Midi.h>
 #include <OSCClient.h>
 #include <OSCServer.h>
+#include <math.h>
 
 
 // OSC variables
@@ -12,7 +13,7 @@ int remotePort = 7563;
 const char* remoteIp = "127.0.0.1";
 
 
-std::string encodeNoteOnOff(int midiNote, int velocity, bool isOn) {
+std::string encodeNoteOnOff(float midiNote,float velocity, float isOn) {
 	std::string sMessage = "";
 	sMessage += std::to_string(midiNote);
 	sMessage += ',';
@@ -67,10 +68,18 @@ void sendPositionalDataToBrowser(float x, float y, float a)
 	oscClient.queueMessage(oscClient.newMessage.to("/osc-player1-xya").add(encodeNoteOnOff(x, y, a)).end());
 }
 
-void sendBlockSizeToBrowser(char index, char value)
+void sendBlockSizeToBrowser(unsigned int index, char value)
 {
+	const int numBlocks = 8;
+	static float blockValues[numBlocks];
 	float fValue = value / 127.f;
-	rt_printf("oscSender: %d %f\n", index, fValue);
+	float old = blockValues[index];
+	float threshold = 0.05;
+	if(fabsf(old - fValue) < threshold)
+	{
+		return;
+	}
+	blockValues[index] = fValue;
 	oscClient.queueMessage(oscClient.newMessage.to("/osc-block-size").add(encodeControlChange(index, fValue)).end());
 }
 
