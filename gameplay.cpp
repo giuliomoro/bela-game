@@ -65,8 +65,9 @@ void computeLocationSendToBrowser(float db, float note)
 	if((count & 31) == 0)
 	{
 		sendPositionalDataToBrowser(gX, gY, gSpeedX * 20);
-		rt_printf("x: %10f, y: %10f, speed: %10f, db: %10f\n", x, y, gSpeedX, db);
 	}
+	if((count & 127) == 0)
+		rt_printf("x: %10f, y: %10f, speed: %10f, db: %10f\n", x, y, gSpeedX, db);
 	count++;
 	//scope.log(x, y, 0, 0);
 }
