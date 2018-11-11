@@ -1,4 +1,4 @@
-# Dynamic Duo
+# Play the Singer
 
 Team \#7 submission for the first Red Hackathon held in Studio One at Abbey Road on 10-11 November 2018.
 
@@ -13,10 +13,10 @@ Item | What is it for?
 [Audio Commons resources](http://isophonics.net/abrhackday) | get audio samples to jam with using Python 
 other stuff | microphone, headphone, midi sequencer etc.
 
-You also need to install some other dependencies:
+## Prerequisites
 
 ```
-# Pd external
+### Pd external
 apt-get install pd-iemlib
 
 # aubio (python didn't work :( )
@@ -26,11 +26,29 @@ cd aubio-0.4.7
 ./waf configure build && ./waf install
 ldconfig
 
-# some npm install: express, osc-min, socket.io
+### For the node OSC/WS bridge (in the project)
+```
+cd node
+npm install
+```
 
-# if you want to retrieve Creative Commons samples on Bela, you will need an internet connection (ethernet or wi-fi dongle). Then you might need to install pip, libdev-sox, pysox, sox, and download sounds into the 'samples' folder according to your 9 keywords of choice with the following command.
+### For using Freesound or AudioCommons servers to retrieve more samples:
 
+```
+apt-get install libsox-dev
+pip install requests pysox
+```
+
+## Retrieving Creative Commons samples (an optional step)
+
+If you want to retrieve Creative Commons samples on Bela, you will need an internet connection (ethernet or wi-fi dongle). You can then download sounds into the 'samples' folder according to your 9 keywords of choice with the following command.
+
+```
 python main.py background-sound keyword1 keyword2 keyword3 keyword4 keyword5 keyword6 keyword7 keyword8
+```
+or
+```
+python main.py ambient cat lion baby crash thunder trump kick [in the] ass
 ```
 
 ## How to jam?
