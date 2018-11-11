@@ -1,6 +1,6 @@
 #N canvas 0 23 1280 751 12;
 #X obj 247 189 hradio 30 1 0 16 empty empty empty 8 -8 0 8 -62784 -258699
--258699 12;
+-258699 3;
 #X obj 247 222 tgl 30 0 empty empty empty 20 8 0 8 -44926 -258699 -1
 0 1;
 #X obj 277 222 tgl 30 0 empty empty empty 20 8 0 8 -44926 -258699 -1
@@ -111,7 +111,7 @@
 #X floatatom 113 173 0 0 0 0 - - -;
 #X text 146 174 setbar;
 #X text 134 145 skipbar;
-#X obj 33 13 loadbang;
+#X obj 9 5 loadbang;
 #X obj 123 197 tgl 20 0 empty empty empty 20 8 0 8 -241291 -258699
 -1 0 1;
 #X text 145 200 link bar;
@@ -247,7 +247,7 @@ creation arguments;
 #X floatatom 1067 340 5 0 0 0 - - -;
 #X obj 1067 435 phasor~;
 #X obj 1467 375 hsl 200 15 0 1 0 0 empty empty empty -2 -6 0 8 -262144
--1 -1 17909 1;
+-1 -1 13987 1;
 #X text 1465 398 0;
 #X text 1665 395 1;
 #X obj 1068 652 tabread4~ array1;
@@ -328,6 +328,8 @@ creation arguments;
 #X obj 1028 893 change;
 #X obj 1038 950 print bela_loud;
 #X obj 932 947 f;
+#X obj 453 135 r bela_steps;
+#X obj 453 164 s beat;
 #X connect 1 0 74 0;
 #X connect 2 0 74 1;
 #X connect 3 0 74 2;
@@ -356,7 +358,6 @@ creation arguments;
 #X connect 30 0 21 5;
 #X connect 33 0 46 0;
 #X connect 33 0 25 0;
-#X connect 33 0 22 0;
 #X connect 34 0 21 6;
 #X connect 36 0 37 0;
 #X connect 37 0 74 16;
@@ -390,8 +391,6 @@ creation arguments;
 #X connect 65 0 41 0;
 #X connect 65 1 41 0;
 #X connect 65 2 41 0;
-#X connect 65 3 41 0;
-#X connect 65 4 41 0;
 #X connect 66 0 1 0;
 #X connect 66 0 2 0;
 #X connect 66 0 3 0;
@@ -529,3 +528,4 @@ creation arguments;
 #X connect 177 0 166 0;
 #X connect 178 0 179 0;
 #X connect 180 0 166 0;
+#X connect 181 0 182 0;
