@@ -15,7 +15,7 @@ void setupLocation(float newLocationSampleRate)
 
 float mapNote(float note)
 {
-	float minNote = 48;
+	float minNote = 42;
 	float maxNote = 78;
 	float range = maxNote - minNote;
 	float rel = (note - minNote)/range;

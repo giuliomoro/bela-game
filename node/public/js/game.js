@@ -28,6 +28,12 @@ let collision = false;
 
 var socket = io();
 
+var increment = 50;
+var step = 0;
+
+var blockOffset;
+var blockEnd;
+
 socket.on('connect', function() {
  console.log('connected');
 });
@@ -72,6 +78,10 @@ function setup() {
 
   avatar.addImage(avatarImg);
 
+  blockOffset = width - (imgCoordinates[0]+avatar.width/2);
+  blockEnd = blockOffset + (nBlocks-1)*(obstacleWidth + obstacleSpace);
+  console.log(blockOffset);
+
   obstacles = new Group();
 
   blocks = new Array();
@@ -81,13 +91,24 @@ function setup() {
 
 }
 
-socket.on('player1-xy', function(obj) {
-    // imageY = Math.round(linScale(obj.data1, 150, 400, 0, rows-1));
-    console.log(obj.data2);
-    if(obj.data2 >= 0) {
-      if(avatar !== undefined)
-        avatar.position.y = linScale(obj.data2, 1, 0, 0, height-imgDimensions[0])
+socket.on('player1-xya', function(obj) {
+    if(obj.y >= 0) {
+      if(avatar !== undefined) {
+        var newPosition = linScale(obj.y, 1, 0, 0, height-imgDimensions[0]) - avatar.height/2;
+        if(newPosition < avatar.height/2)
+          newPosition = avatar.height/2;
+        avatar.position.y = newPosition;
+      }
     }
+    if(obj.x >= 0) {
+      increment = linScale(obj.x, 0, 1, 15, 75);
+    }
+});
+
+socket.on('block-size', (obj) => {
+    console.log(obj);
+    let newH = linScale(obj.value, 0, 1, 0, Math.round(3.5 * columns/4));
+    blocks[parseInt(obj.index)].updateHeight(newH);
 
 });
 
@@ -96,20 +117,29 @@ function draw() {
 
   if(!avatar.overlap(obstacles)) {
     for (let b = 0; b < blocks.length; b++) {
-      blocks[b].move(20);
+      blocks[b].move(increment);
     }
   }
 
-  // }
 
-   drawSprite(avatar);
-   drawSprites(obstacles);
+  obstacles.overlap(avatar, limitAvatarY);
+  drawSprites();
 
+}
+
+function limitAvatarY(member, sprite) {
+  if((avatar.position.x) > (member.position.x - member.width/2)) {
+    if(avatar.position.y  >= member.position.y - avatar.height/2 - member.height/2 - 1) {
+      avatar.position.y = member.position.y - member.height/2 - avatar.height/2;
+
+    }
+  }
 }
 
 function Block(id, height) {
   this.id = id;
   this.height = height;
+  this.newHeight = height;
   this.position = this.calcPosition(this.id);
   this.obstacle;
   this.create();
@@ -121,21 +151,29 @@ Block.prototype.calcPosition = function(i) {
 }
 Block.prototype.create = function() {
     this.obstacle = createSprite(this.position, height - (this.height/2), obstacleWidth, this.height * w)
-    this.obstacle.setCollider("rectangle", 0, 0, obstacleWidth, this.height * w);
+    this.obstacle.setCollider("rectangle", 0, 0, obstacleWidth+0.5, this.height * w+0.5   );
     this.obstacle.shapeColor = color(colors.grid);
     obstacles.add(this.obstacle);
 }
 Block.prototype.updateHeight = function(newHeight) {
-  this.height = newHeight;
+  this.newHeight = newHeight;
+  if(this.height != this.newHeight) {
+    this.height = this.newHeight;
+    this.obstacle.height = this.height * w;
+    this.obstacle.setCollider("rectangle", 0, 0, obstacleWidth+0.5, this.height * w+0.5);
+  }
 }
 Block.prototype.move = function(incr) {
-  // this.obstacle.velocity.x = (-incr)/10;
   this.obstacle.position.x = this.obstacle.position.x - incr;
   if(this.obstacle.position.x == width - obstacleWidth/2) {
-    // console.log("Hello, I'm block "+this.id);
   } else if(this.obstacle.position.x <= -obstacleWidth/2) {
-    // console.log("Bye! Says block "+this.id);
     this.obstacle.position.x = this.obstacle.position.x + (nBlocks-2) * obstacleWidth + (nBlocks-1.5) * obstacleSpace;
+    // if(this.height != this.newHeight) {
+    //   this.height = this.newHeight;
+    //   this.obstacle.height = this.height * w;
+    //   this.obstacle.setCollider("rectangle", 0, 0, obstacleWidth+0.5, this.height * w+0.5);
+    // }
+
   }
 }
 
