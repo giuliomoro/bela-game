@@ -41,6 +41,7 @@ extern float gNote;
 extern float gAmp;
 
 void initOSC();
+void handleControlChange(char controller, char value); //MODIFICATION
 extern "C" {
 	int aubio_pitch_setup(float sampleRate);
 	void process_block(fvec_t * ibuf, fvec_t * obuf);
@@ -547,6 +548,7 @@ void render(BelaContext *context, void *userData)
 					int channel = message.getChannel();
 					int controller = message.getDataByte(0);
 					int value = message.getDataByte(1);
+					handleControlChange(controller, value); //MODIFICATION
 					libpd_controlchange(channel + port * 16, controller, value);
 					break;
 				}

@@ -67,6 +67,44 @@ void sendDataToBrowser(float x, float y)
 	oscClient.queueMessage(oscClient.newMessage.to("/osc-player1-xy").add(encodeControlChange(x, y)).end());
 }
 
+void sendBlockSizeToBrowser(char index, char value)
+{
+	float fValue = value / 127.f;
+	rt_printf("oscSender: %d %f\n", index, fValue);
+	oscClient.queueMessage(oscClient.newMessage.to("/osc-block-size").add(encodeControlChange(index, fValue)).end());
+}
+
+void handleControlChange(char controller, char value)
+{
+	switch (controller){
+		case 18:
+		case 22:
+		case 26:
+		case 30:
+		case 48:
+		case 52:
+		case 56:
+		case 60:
+			break;
+		case 19:
+			sendBlockSizeToBrowser(0, value);
+		case 23:
+			sendBlockSizeToBrowser(1, value);
+		case 27:
+			sendBlockSizeToBrowser(2, value);
+		case 31:
+			sendBlockSizeToBrowser(3, value);
+		case 49:
+			sendBlockSizeToBrowser(4, value);
+		case 53:
+			sendBlockSizeToBrowser(5, value);
+		case 57:
+			sendBlockSizeToBrowser(6, value);
+		case 61:
+			sendBlockSizeToBrowser(7, value);
+	}
+}
+
 void midiMessageCallback(MidiChannelMessage message, void* arg){
 	if(arg != NULL){
 		rt_printf("Message from midi port %s ", (const char*) arg);
