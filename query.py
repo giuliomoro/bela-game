@@ -46,7 +46,7 @@ def retrieve_sound(keyword, name):
     if name == 'ambient':
         MAX_DUR = 20
     else:
-        MAX_DUR = 2
+        MAX_DUR = 1
 
     soundpath = [] #stays empty if no sounds can be found matching the criteria
 
@@ -58,6 +58,7 @@ def retrieve_sound(keyword, name):
     #specifies the query through keyword and filtering options
     #in this example, the selected source content provider is Freesound
     params = dict(pattern=keyword, source="freesound")
+#    params = dict(query=keyword,source="freesound",filter="duration:[%d TO %d]"%(MIN_DUR,MAX_DUR))
     response = requests.get(url, params=params)
     print(urllib.unquote(response.url).decode('utf8'))
 
