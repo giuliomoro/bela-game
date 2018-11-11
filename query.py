@@ -43,11 +43,6 @@ def download_sound(q,soundurl,soundpath):
 
 def retrieve_sound(keyword, name):
 
-        if name == 'ambient':
-            MAX_DUR = 20
-        else:
-            MAX_DUR = 2
-
     soundpath = [] #stays empty if no sounds can be found matching the criteria
 
     queue = Queue() #queue for process
