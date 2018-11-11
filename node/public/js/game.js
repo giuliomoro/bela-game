@@ -84,8 +84,9 @@ function setup() {
 socket.on('player1-xy', function(obj) {
     // imageY = Math.round(linScale(obj.data1, 150, 400, 0, rows-1));
     console.log(obj.data2);
-    if(obj.data2 != -1) {
-      // avatar.position.y = linScale(obj.data2, 1, 0, 0, height-imgDimensions[0])
+    if(obj.data2 >= 0) {
+      if(avatar !== undefined)
+        avatar.position.y = linScale(obj.data2, 1, 0, 0, height-imgDimensions[0])
     }
 
 });
@@ -153,4 +154,6 @@ function linScale( val, f0, f1, t0, t1 ) {
       retVal = t0;
     if(retVal > t1)
       retVal = t1;
+
+    return retVal;
 }

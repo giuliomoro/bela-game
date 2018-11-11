@@ -33,7 +33,7 @@ float smoothX(float newX)
 }
 float smoothY(float newY)
 {
-	float positionAlpha = 0.95;
+	float positionAlpha = 0.98;
 	static float oldY = 0;
 	float y = newY * (1.f - positionAlpha) + oldY * positionAlpha;
 	oldY = y;
