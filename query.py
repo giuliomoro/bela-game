@@ -43,11 +43,17 @@ def download_sound(q,soundurl,soundpath):
 
 def retrieve_sound(keyword, name):
 
+    if name == 'ambient':
+        MAX_DUR = 20
+    else:
+        MAX_DUR = 2
+
     soundpath = [] #stays empty if no sounds can be found matching the criteria
 
     queue = Queue() #queue for process
 
     print("Query")
+
 
     #specifies the query through keyword and filtering options
     #in this example, the selected source content provider is Freesound
@@ -87,11 +93,13 @@ def retrieve_sound(keyword, name):
                 for i in resdic["results"][0]["members"][sound_index]["content"]["availableAs"]:
                     audioencoding = i["hasAudioEncodingFormat"]
                     if resdic["results"][0]["members"][sound_index]["content"]["license"] == "http:/creativecommons.org/publicdomain/zero/1.0/":
-                        print('PUBLIC DOMAIN !')
+                        print('PUBLIC DOMAIN - CC0')
                         print(resdic["results"][0]["members"][sound_index]["content"]["license"])
+                        print("Author: %s" %resdic["results"][0]["members"][sound_index]["content"]["author"])
                     else:
-                        print('NOT PUBLIC DOMAIN!')
-                        print(resdic["results"][0]["members"][sound_index]["content"]["author"])
+                        print('REQUIRES ATTRIBUTION')
+                        print(resdic["results"][0]["members"][sound_index]["content"]["license"])
+                        print("Author: %s" %resdic["results"][0]["members"][sound_index]["content"]["author"])
 
                     print('AUDIO ENCODING {}'.format(audioencoding))
                     if (audioencoding=="ebu-codecs:_8.4" or "mp3" in audioencoding): #mp3
