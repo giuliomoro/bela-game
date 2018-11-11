@@ -62,10 +62,11 @@ void initOSC() {
 #endif
 }
 
-void sendDataToBrowser(float pitch, float amp)
+void sendDataToBrowser(float x, float y)
 {
-	oscClient.queueMessage(oscClient.newMessage.to("/osc-player1-xy").add(encodeControlChange(pitch, amp)).end());
+	oscClient.queueMessage(oscClient.newMessage.to("/osc-player1-xy").add(encodeControlChange(x, y)).end());
 }
+
 void midiMessageCallback(MidiChannelMessage message, void* arg){
 	if(arg != NULL){
 		rt_printf("Message from midi port %s ", (const char*) arg);

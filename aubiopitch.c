@@ -20,15 +20,18 @@
 
 #include <Bela.h>
 #include <aubio/aubio.h>
+#include <aubio/mathutils.h>
 #include <stdio.h>
 
-aubio_pitch_t *o;
-aubio_wavetable_t *wavetable;
-fvec_t *pitch;
-smpl_t amp;
+float gAmp;
+float gNote;
+
+static aubio_pitch_t *o;
+static aubio_wavetable_t *wavetable;
+static fvec_t *pitch;
 
 int mix_input = 0;
-int buffer_size = 2048;
+int buffer_size = 1024;
 char_t * pitch_unit = "default";
 char_t * pitch_method = "default";
 uint_t hop_size = 128;
@@ -42,20 +45,20 @@ float cancellationGain = 1;
 
 void process_block(fvec_t * ibuf, fvec_t * obuf)
 {
-  smpl_t freq;
   //get the pitch
   aubio_pitch_do (o, ibuf, pitch);
-  //if ( !usejack && ! sink_uri ) return;
   fvec_zeros(obuf);
-  freq = fvec_get_sample(pitch, 0);
+  gNote = aubio_freqtomidi(fvec_get_sample(pitch, 0));
   // get the amplitude
-  amp = aubio_level_lin (ibuf);
-  aubio_wavetable_set_amp ( wavetable, 100*amp);
-  aubio_wavetable_set_freq ( wavetable, freq );
+  gAmp = aubio_db_spl(ibuf);
+#if 0 // playback some pitch-tracking audio
+  aubio_wavetable_set_amp ( wavetable, 100 * gAmp);
+  aubio_wavetable_set_freq ( wavetable, gNote);
   if (mix_input)
     aubio_wavetable_do (wavetable, ibuf, obuf);
   else
     aubio_wavetable_do (wavetable, obuf, obuf);
+#endif
 }
 
 void aubio_pitch_render(BelaContext *context, void *userData)
