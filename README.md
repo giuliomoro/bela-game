@@ -25,6 +25,7 @@ tar xvf aubio-0.4.7.tar.bz2
 cd aubio-0.4.7
 ./waf configure build && ./waf install
 ldconfig
+```
 
 ### For the node OSC/WS bridge (in the project)
 ```
