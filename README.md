@@ -1,6 +1,6 @@
 # Play the Singer
 
-Team \#7 submission for the first Red Hackathon held in Studio One at Abbey Road on 10-11 November 2018.
+Table \#7 submission for the first Red Hackathon held in Studio One at Abbey Road on 10-11 November 2018.
 
 **♬ Singing with your DJ friend like gamifying a jam! ♬**
 
